@@ -8,16 +8,17 @@ const loader = document.getElementById("loader");
 
 let apiQuotes = [];
 
-// show showLoadingSpinner
 function showLoadingSpinner(){
     loader.hidden = false;
     quoteContainer.hidden = true;
 }
 
-//  Hide Loder
+
 function removeLoadingSpinner(){
+    if(!loader.hidden) {
     loader.hidden = true;
     quoteContainer.hidden = false;
+    }
 }
 
 
@@ -40,9 +41,11 @@ function newQuote() {
 // Get Quotes from API
 async function getQuotes() {
   showLoadingSpinner();
-  const apiUrl = "https://jacintodesign.github.io/quotes-api/data/quotes.json";
+  // we need to use a Proxy URL to make our API call in order to avoid unexpected errors
+  const proxyURL ="https://jacinto-cors-proxy.herokuapp.com"
+  const apiUrl = "http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json";
   try {
-    const response = await fetch(apiUrl);
+    const response = await fetch(proxyURL + apiUrl);
     apiQuotes = await response.json();
     newQuote();
   } catch (error) {
